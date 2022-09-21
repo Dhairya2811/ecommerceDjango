@@ -24,14 +24,6 @@ class Category(models.Model):
     def __str__(self):
         return f"{self.pk}. - {self.Item_Category}"
 
-
-def filepath(request, filename):
-    old_filename = filename
-    timeNow = datetime.now().strftime('%Y%m%d%H:%M:%S')
-    filename = "%s%s" % (timeNow, old_filename)
-    return os.path.join("upload/", filename)
-
-
 class SellItemList(models.Model):
     """ this module will store item details """
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="item_to_sell")
@@ -39,7 +31,7 @@ class SellItemList(models.Model):
     buyers = models.ManyToManyField(User, default=None, blank=True)
     quantity = models.IntegerField(default=1)
     title = models.TextField()
-    image_url = models.ImageField(upload_to=filepath, null=True, blank=True)
+    image_url = models.TextField()
     description = models.TextField()
     price = models.FloatField(default=0.00)
 

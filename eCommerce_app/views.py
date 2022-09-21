@@ -9,6 +9,8 @@ from django.db import IntegrityError
 from .models import User, Category, Comment, Cart
 from .models import SellItemList as SI
 from django.core.paginator import Paginator, EmptyPage
+from PIL import Image
+import base64
 
 
 # from django.views.generic.list import ListView
@@ -146,12 +148,18 @@ def new_item(request):
         print(len(request.FILES))
         if len(request.FILES) != 0:
             url = request.FILES["item_image_url"]
+            f = url.read()
+            b = bytearray(f)
+            image = b
+            encode = base64.b64encode(image)
+            image_uri = str(encode)[2:len(str(encode))-1]
+            print(image_uri)
         quantity = request.POST.get("quantity")
         category = request.POST["item_category"]
         cat = Category.objects.get(Item_Category=category)
         user = request.user
         if (str (request.POST.get("update"))) != "update" :
-            add_item = SI(category=cat, seller=user, quantity=quantity, title=title.lower(), image_url=url,
+            add_item = SI(category=cat, seller=user, quantity=quantity, title=title.lower(), image_url=image_uri,
                           description=description, price=price)
             add_item.save()
             return HttpResponseRedirect(reverse("index"))
@@ -160,7 +168,7 @@ def new_item(request):
             item = SI.objects.get(id = item_id)
             item.title = title
             item.description = description
-            item.image_url = url
+            item.image_url = image_uri
             item.price = price
             item.quantity = quantity
             item.category = cat
