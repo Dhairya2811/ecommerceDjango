@@ -1,7 +1,7 @@
 {% for j in items %}
     {% for i in j %}
         {% if i.quantity != 0 %}
-            <div class="p-2 item_card" style="height: 20em;" id="{{i.id}}">
+            <div class="p-2 item_card" style="height: 20em; width: auto; max-width:20em;" id="{{i.id}}">
                 <img src="data:image/png;base64,{{i.image_url}}" style="height: 15em"  id="{{i.id}}">
                 <h3 id="{{i.id}}">{{i.title | capfirst}}</h3>
                 <p id="{{i.id}}"><small id="{{i.id}}">$</small><span id="{{i.id}}" class="price">{{i.price}}</span></p>
